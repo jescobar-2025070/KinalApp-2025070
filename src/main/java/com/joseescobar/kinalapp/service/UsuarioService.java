@@ -1,6 +1,5 @@
 package com.joseescobar.kinalapp.service;
 
-import com.joseescobar.kinalapp.entity.Cliente;
 import com.joseescobar.kinalapp.entity.Usuario;
 import com.joseescobar.kinalapp.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
@@ -33,28 +32,37 @@ public class UsuarioService implements IUsuarioService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Usuario> buscarPorCodigo(int codigoUsuario) {
-        return usuarioRepository.findById(String.valueOf(codigoUsuario));
+        return usuarioRepository.findById(codigoUsuario);
     }
 
     @Override
     public Usuario actualizar(int codigoUsuario, Usuario usuario) {
-        return null;
+
+        if (!usuarioRepository.existsById(codigoUsuario))
+            throw new RuntimeException("El Codigo De Usuario No Existe");
+        usuario.setCodigoUsuario(codigoUsuario);
+        validarUsuario(usuario);
+        return usuarioRepository.save(usuario);
     }
 
     @Override
     public void eliminar(int codigoUsuario) {
-
+        if(!usuarioRepository.existsById(codigoUsuario))
+            throw new RuntimeException("El Usuario no existe");
+        usuarioRepository.deleteById(codigoUsuario);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existePorCodigo(int codigoUsuario) {
-        return false;
+        return usuarioRepository.existsById(codigoUsuario);
     }
 
     @Override
     public List<Usuario> findByEstado(int estado) {
-        return List.of();
+        return usuarioRepository.findByEstado(estado);
     }
 
     private void validarUsuario(Usuario usuario){
