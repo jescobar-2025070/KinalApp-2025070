@@ -88,4 +88,25 @@ public class ClienteController {
         return ResponseEntity.ok(clientes);
     }
 
+    //PUT actualiza un cliente existente
+    @PutMapping("/{dpi}")
+    public ResponseEntity<?> actualizar(@PathVariable String dpi, @RequestBody Cliente cliente) {
+        try {
+            // Delegamos la actualización al servicio
+            Cliente clienteActualizado = clienteService.actualizar(dpi, cliente);
+            return ResponseEntity.ok(clienteActualizado);
+            // 200 OK con los datos actualizados
+
+        } catch (IllegalArgumentException e) {
+            // Si hay un error de validación (ej. nombre vacío)
+            return ResponseEntity.badRequest().body(e.getMessage());
+            // 400 BAD REQUEST
+
+        } catch (RuntimeException e) {
+            // Si el cliente con ese DPI no existe
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            // 404 NOT FOUND
+        }
+    }
+
 }
