@@ -61,5 +61,17 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
+    @PutMapping("/{codigoUsuario}")
+    public ResponseEntity<?> actualizar(@PathVariable int codigoUsuario, @RequestBody Usuario usuario) {
+        try {
+            Usuario usuarioActualizado = usuarioService.actualizar(codigoUsuario, usuario);
+            return ResponseEntity.ok(usuarioActualizado);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 
 }
