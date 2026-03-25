@@ -1,0 +1,13 @@
+package com.joseescobar.kinalapp;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class KinalAppApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(KinalAppApplication.class, args);
+	}
+
+}
