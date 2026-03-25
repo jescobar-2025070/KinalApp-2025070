@@ -9,5 +9,7 @@ public interface IDetalleVentaRepository {
     List<DetalleVenta> listarTodos();
     DetalleVenta guardar(DetalleVenta detalleVenta);
     Optional<DetalleVenta> buscarPorCodigo(int codigoDetalleVenta);
-
+    DetalleVenta actualizar(int codigoDetalleVenta, DetalleVenta detalleVenta);
+    void eliminar(int codigoDetalleVenta);
+    boolean existePorCodigo(int codigoDetalleVenta);
 }
