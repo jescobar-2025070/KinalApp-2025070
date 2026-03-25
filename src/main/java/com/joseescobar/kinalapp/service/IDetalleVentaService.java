@@ -5,7 +5,7 @@ import com.joseescobar.kinalapp.entity.DetalleVenta;
 import java.util.List;
 import java.util.Optional;
 
-public interface IDetalleVentaRepository {
+public interface IDetalleVentaService {
     List<DetalleVenta> listarTodos();
     DetalleVenta guardar(DetalleVenta detalleVenta);
     Optional<DetalleVenta> buscarPorCodigo(int codigoDetalleVenta);
