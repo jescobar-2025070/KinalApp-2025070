@@ -1,6 +1,7 @@
 package com.joseescobar.kinalapp.service;
 
 
+import com.joseescobar.kinalapp.entity.Cliente;
 import com.joseescobar.kinalapp.entity.Venta;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface IVentaService {
     Venta actualizar(int codigoVenta, Venta venta);
     void eliminar(int codigoVenta);
     boolean existePorCodigo(int codigoVenta);
+    List<Venta> findByEstado(int estado);
 }
