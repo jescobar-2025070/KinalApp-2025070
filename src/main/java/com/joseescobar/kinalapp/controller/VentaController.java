@@ -1,6 +1,7 @@
 package com.joseescobar.kinalapp.controller;
 
 import com.joseescobar.kinalapp.entity.Cliente;
+import com.joseescobar.kinalapp.entity.Usuario;
 import com.joseescobar.kinalapp.entity.Venta;
 import com.joseescobar.kinalapp.service.IVentaService;
 import org.hibernate.sql.exec.spi.PostAction;
@@ -30,6 +31,12 @@ public class VentaController {
         return ventaService.buscarPorCodigo(codigoVenta)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/estado/{estado}")
+    public ResponseEntity<List<Venta>> listarPorEstado(@PathVariable int estado){
+        List<Venta> ventas = ventaService.findByEstado(estado);
+        return ResponseEntity.ok(ventas);
     }
 
     @PostMapping
