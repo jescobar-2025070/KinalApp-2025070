@@ -55,6 +55,11 @@ public class VentaService implements IVentaService{
         return ventaRepository.existsById(codigoVenta);
     }
 
+    @Override
+    public List<Venta> findByEstado(int estado) {
+        return ventaRepository.findByEstado(estado);
+    }
+
     private void validarVenta(Venta venta) {
         if (venta.getFechaVenta() == null) {
             throw new IllegalArgumentException("La fecha de venta es obligatoria.");
