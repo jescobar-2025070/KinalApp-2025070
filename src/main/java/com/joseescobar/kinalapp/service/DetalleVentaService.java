@@ -2,11 +2,15 @@ package com.joseescobar.kinalapp.service;
 
 import com.joseescobar.kinalapp.entity.DetalleVenta;
 import com.joseescobar.kinalapp.repository.DetalleVentaRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+@Service
+@Transactional
 public class DetalleVentaService implements IDetalleVentaService{
 
     private final DetalleVentaRepository detalleVentaRepository;
@@ -16,6 +20,7 @@ public class DetalleVentaService implements IDetalleVentaService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<DetalleVenta> listarTodos() {
         return detalleVentaRepository.findAll();
     }
@@ -49,6 +54,7 @@ public class DetalleVentaService implements IDetalleVentaService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existePorCodigo(int codigoDetalleVenta) {
         return detalleVentaRepository.existsById(codigoDetalleVenta);
     }

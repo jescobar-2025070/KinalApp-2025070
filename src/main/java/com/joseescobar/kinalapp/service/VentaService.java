@@ -6,6 +6,7 @@ import com.joseescobar.kinalapp.repository.VentaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -65,7 +66,7 @@ public class VentaService implements IVentaService{
             throw new IllegalArgumentException("La fecha de venta es obligatoria.");
         }
 
-        if (venta.getTotal() <= 0) {
+        if (venta.getTotal() == null || venta.getTotal().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("El total de la venta debe ser mayor a 0.");
         }
     }
