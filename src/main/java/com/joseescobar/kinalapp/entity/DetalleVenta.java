@@ -1,6 +1,7 @@
 package com.joseescobar.kinalapp.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "DetalleVenta")
@@ -10,10 +11,10 @@ public class DetalleVenta {
     private int codigoDetalleVenta;
     @Column
     private int cantidad;
-    @Column
-    private double precioUnitario;
-    @Column
-    private double decimal;
+    @Column(name = "precio_unitario", precision = 10, scale = 2)
+    private BigDecimal precioUnitario;
+    @Column(name = "sub_total", precision = 10, scale = 2)
+    private BigDecimal subTotal;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="ventas_codigo_venta")
     private Venta codigoVenta;
@@ -24,11 +25,11 @@ public class DetalleVenta {
     public DetalleVenta() {
     }
 
-    public DetalleVenta(int codigoDetalleVenta, int cantidad, double precioUnitario, double decimal, Venta codigoVenta, Producto codigoProducto) {
+    public DetalleVenta(int codigoDetalleVenta, int cantidad, BigDecimal precioUnitario, BigDecimal subTotal, Venta codigoVenta, Producto codigoProducto) {
         this.codigoDetalleVenta = codigoDetalleVenta;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
-        this.decimal = decimal;
+        this.subTotal = subTotal;
         this.codigoVenta = codigoVenta;
         this.codigoProducto = codigoProducto;
     }
@@ -49,20 +50,20 @@ public class DetalleVenta {
         this.cantidad = cantidad;
     }
 
-    public double getPrecioUnitario() {
+    public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(double precioUnitario) {
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
-    public double getDecimal() {
-        return decimal;
+    public BigDecimal getSubTotal() {
+        return subTotal;
     }
 
-    public void setDecimal(double decimal) {
-        this.decimal = decimal;
+    public void setSubTotal(BigDecimal subTotal) {
+        this.subTotal = subTotal;
     }
 
     public Venta getCodigoVenta() {

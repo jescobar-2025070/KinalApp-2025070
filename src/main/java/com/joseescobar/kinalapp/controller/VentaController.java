@@ -1,10 +1,7 @@
 package com.joseescobar.kinalapp.controller;
 
-import com.joseescobar.kinalapp.entity.Cliente;
-import com.joseescobar.kinalapp.entity.Usuario;
 import com.joseescobar.kinalapp.entity.Venta;
 import com.joseescobar.kinalapp.service.IVentaService;
-import org.hibernate.sql.exec.spi.PostAction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +46,7 @@ public class VentaController {
         }
     }
 
-    @DeleteMapping("/{dpi}")
+    @DeleteMapping("/{codigoVenta}")
     public ResponseEntity<Void> eliminar(@PathVariable int codigoVenta){
         try{
             if (!ventaService.existePorCodigo(codigoVenta)){
