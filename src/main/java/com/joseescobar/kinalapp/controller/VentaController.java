@@ -49,7 +49,7 @@ public class VentaController {
         }
     }
 
-    @DeleteMapping("/{dpi}")
+    @DeleteMapping("/{codigoVenta}")
     public ResponseEntity<Void> eliminar(@PathVariable int codigoVenta){
         try{
             if (!ventaService.existePorCodigo(codigoVenta)){
