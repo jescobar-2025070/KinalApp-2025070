@@ -1,7 +1,6 @@
 package com.joseescobar.kinalapp.service;
 
 import com.joseescobar.kinalapp.entity.Producto;
-import com.joseescobar.kinalapp.entity.Venta;
 
 import java.util.List;
 import java.util.Optional;
