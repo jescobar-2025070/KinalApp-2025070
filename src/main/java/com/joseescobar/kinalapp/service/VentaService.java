@@ -30,12 +30,12 @@ public class VentaService implements IVentaService{
     }
 
     @Override
-    public Optional<Venta> buscarPorCodigo(int codigoVenta) {
+    public Optional<Venta> buscarPorCodigo(Long codigoVenta) {
         return ventaRepository.findById(codigoVenta);
     }
 
     @Override
-    public Venta actualizar(int codigoVenta, Venta venta) {
+    public Venta actualizar(Long codigoVenta, Venta venta) {
         if(!ventaRepository.existsById(codigoVenta))
             throw new RuntimeException("El codigo de venta no existe");
         venta.setCodigoVenta(codigoVenta);
@@ -44,7 +44,7 @@ public class VentaService implements IVentaService{
     }
 
     @Override
-    public void eliminar(int codigoVenta) {
+    public void eliminar(Long codigoVenta) {
         if(!ventaRepository.existsById(codigoVenta))
             throw new RuntimeException("La venta no existe");
         ventaRepository.deleteById(codigoVenta);
@@ -52,7 +52,7 @@ public class VentaService implements IVentaService{
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existePorCodigo(int codigoVenta) {
+    public boolean existePorCodigo(Long codigoVenta) {
         return ventaRepository.existsById(codigoVenta);
     }
 

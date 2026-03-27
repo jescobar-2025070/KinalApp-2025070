@@ -8,8 +8,8 @@ import java.util.Optional;
 public interface IDetalleVentaService {
     List<DetalleVenta> listarTodos();
     DetalleVenta guardar(DetalleVenta detalleVenta);
-    Optional<DetalleVenta> buscarPorCodigo(int codigoDetalleVenta);
-    DetalleVenta actualizar(int codigoDetalleVenta, DetalleVenta detalleVenta);
-    void eliminar(int codigoDetalleVenta);
-    boolean existePorCodigo(int codigoDetalleVenta);
+    Optional<DetalleVenta> buscarPorCodigo(Long codigoDetalleVenta);
+    DetalleVenta actualizar(Long codigoDetalleVenta, DetalleVenta detalleVenta);
+    void eliminar(Long codigoDetalleVenta);
+    boolean existePorCodigo(Long codigoDetalleVenta);
 }

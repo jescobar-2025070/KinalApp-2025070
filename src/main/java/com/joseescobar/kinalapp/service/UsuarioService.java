@@ -42,12 +42,12 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Usuario> buscarPorCodigo(int codigoUsuario) {
+    public Optional<Usuario> buscarPorCodigo(Long codigoUsuario) {
         return usuarioRepository.findById(codigoUsuario);
     }
 
     @Override
-    public Usuario actualizar(int codigoUsuario, Usuario usuario) {
+    public Usuario actualizar(Long codigoUsuario, Usuario usuario) {
         return usuarioRepository.findById(codigoUsuario).map(usuarioExistente -> {
             validarUsuario(usuario);
 
@@ -66,7 +66,7 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public void eliminar(int codigoUsuario) {
+    public void eliminar(Long codigoUsuario) {
         if (!usuarioRepository.existsById(codigoUsuario))
             throw new RuntimeException("El Usuario no existe");
         usuarioRepository.deleteById(codigoUsuario);
@@ -74,7 +74,7 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existePorCodigo(int codigoUsuario) {
+    public boolean existePorCodigo(Long codigoUsuario) {
         return usuarioRepository.existsById(codigoUsuario);
     }
 

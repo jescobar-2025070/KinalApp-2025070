@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface IProductoService {
     List<Producto> listarTodos();
     Producto guardar(Producto producto);
-    Optional<Producto> buscarPorCodigo(int codigoProducto);
-    Producto actualizar(int codigoProducto, Producto producto);
-    void eliminar(int codigoProducto);
-    boolean existePorCodigo(int codigoProducto);
+    Optional<Producto> buscarPorCodigo(Long codigoProducto);
+    Producto actualizar(Long codigoProducto, Producto producto);
+    void eliminar(Long codigoProducto);
+    boolean existePorCodigo(Long codigoProducto);
     List<Producto> findByEstado(int estado);
 }

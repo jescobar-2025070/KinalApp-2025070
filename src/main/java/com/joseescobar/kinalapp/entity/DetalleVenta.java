@@ -6,9 +6,11 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "DetalleVenta")
 public class DetalleVenta {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="codigo_detalle_venta")
-    private int codigoDetalleVenta;
+    private Long codigoDetalleVenta;
     @Column
     private int cantidad;
     @Column(name = "precio_unitario", precision = 10, scale = 2)
@@ -25,7 +27,7 @@ public class DetalleVenta {
     public DetalleVenta() {
     }
 
-    public DetalleVenta(int codigoDetalleVenta, int cantidad, BigDecimal precioUnitario, BigDecimal subTotal, Venta codigoVenta, Producto codigoProducto) {
+    public DetalleVenta(Long codigoDetalleVenta, int cantidad, BigDecimal precioUnitario, BigDecimal subTotal, Venta codigoVenta, Producto codigoProducto) {
         this.codigoDetalleVenta = codigoDetalleVenta;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
@@ -34,11 +36,11 @@ public class DetalleVenta {
         this.codigoProducto = codigoProducto;
     }
 
-    public int getCodigoDetalleVenta() {
+    public Long getCodigoDetalleVenta() {
         return codigoDetalleVenta;
     }
 
-    public void setCodigoDetalleVenta(int codigoDetalleVenta) {
+    public void setCodigoDetalleVenta(Long codigoDetalleVenta) {
         this.codigoDetalleVenta = codigoDetalleVenta;
     }
 
