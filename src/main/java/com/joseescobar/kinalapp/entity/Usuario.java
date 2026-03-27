@@ -1,9 +1,6 @@
 package com.joseescobar.kinalapp.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*; // Cambiado para incluir todas las anotaciones de persistencia
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,28 +13,24 @@ import java.util.List;
 public class Usuario implements UserDetails {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="codigo_usuario")
-    private int codigoUsuario;
-
-    @Column
+    private Long codigoUsuario;
+    @Column(unique = true)
     private String userName;
-
     @Column
     private String password;
-
     @Column
     private String email;
-
     @Column
     private String rol;
-
     @Column
     private int estado;
 
     public Usuario() {
     }
 
-    public Usuario(int codigoUsuario, String userName, String password, String email, String rol, int estado) {
+    public Usuario(Long codigoUsuario, String userName, String password, String email, String rol, int estado) {
         this.codigoUsuario = codigoUsuario;
         this.userName = userName;
         this.password = password;
@@ -50,8 +43,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Spring Security espera roles con el prefijo ROLE_
-        // Ejemplo: "ADMIN" se convierte en "ROLE_ADMIN"
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.rol));
     }
 
@@ -62,36 +53,34 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getUsername() {
-        // Retornamos userName porque es el campo que identifica al usuario en tu DB
         return this.userName;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // La cuenta no expira
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // La cuenta no está bloqueada
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // Las credenciales no expiran
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        // Si 'estado' es 1 está activo, si es 0 está inactivo
         return this.estado == 1;
     }
 
-    public int getCodigoUsuario() {
+    public Long getCodigoUsuario() {
         return codigoUsuario;
     }
 
-    public void setCodigoUsuario(int codigoUsuario) {
+    public void setCodigoUsuario(Long codigoUsuario) {
         this.codigoUsuario = codigoUsuario;
     }
 
