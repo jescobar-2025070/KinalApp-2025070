@@ -1,29 +1,32 @@
 package com.joseescobar.kinalapp.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "clientes")
 public class Cliente {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="dpi_cliente")
-    private String DPICliente;
-    @Column
+    private Long DPICliente;
+
+    @Column(name = "nombre_cliente")
     private String nombreCliente;
-    @Column
+
+    @Column(name = "apellido_cliente")
     private String apellidoCliente;
+
     @Column
     private String direccion;
+
     @Column
     private int estado;
 
     public Cliente() {
     }
 
-    public Cliente(String DPICliente, String nombreCliente, String apellidoCliente, String direccion, int estado) {
+    public Cliente(Long DPICliente, String nombreCliente, String apellidoCliente, String direccion, int estado) {
         this.DPICliente = DPICliente;
         this.nombreCliente = nombreCliente;
         this.apellidoCliente = apellidoCliente;
@@ -31,11 +34,11 @@ public class Cliente {
         this.estado = estado;
     }
 
-    public String getDPICliente() {
+    public Long getDPICliente() {
         return DPICliente;
     }
 
-    public void setDPICliente(String DPICliente) {
+    public void setDPICliente(Long DPICliente) {
         this.DPICliente = DPICliente;
     }
 
