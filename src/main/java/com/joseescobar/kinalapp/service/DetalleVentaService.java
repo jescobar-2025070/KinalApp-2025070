@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class DetalleVentaService implements IDetalleVentaService{
+public class DetalleVentaService implements IDetalleVentaService {
 
     private final DetalleVentaRepository detalleVentaRepository;
 
@@ -29,33 +29,35 @@ public class DetalleVentaService implements IDetalleVentaService{
     public DetalleVenta guardar(DetalleVenta detalleVenta) {
         validarDetalleVenta(detalleVenta);
         return detalleVentaRepository.save(detalleVenta);
-
     }
 
     @Override
-    public Optional<DetalleVenta> buscarPorCodigo(int codigoDetalleVenta) {
+    @Transactional(readOnly = true)
+    public Optional<DetalleVenta> buscarPorCodigo(Long codigoDetalleVenta) {
         return detalleVentaRepository.findById(codigoDetalleVenta);
     }
 
     @Override
-    public DetalleVenta actualizar(int codigoDetalleVenta, DetalleVenta detalleVenta) {
-        if(!detalleVentaRepository.existsById(codigoDetalleVenta))
-            throw new RuntimeException("No existe");
+    public DetalleVenta actualizar(Long codigoDetalleVenta, DetalleVenta detalleVenta) {
+        if (!detalleVentaRepository.existsById(codigoDetalleVenta)) {
+            throw new RuntimeException("El detalle de venta no existe");
+        }
         detalleVenta.setCodigoDetalleVenta(codigoDetalleVenta);
         validarDetalleVenta(detalleVenta);
         return detalleVentaRepository.save(detalleVenta);
     }
 
     @Override
-    public void eliminar(int codigoDetalleVenta) {
-        if(!detalleVentaRepository.existsById(codigoDetalleVenta))
-            throw new RuntimeException("No existe");
+    public void eliminar(Long codigoDetalleVenta) {
+        if (!detalleVentaRepository.existsById(codigoDetalleVenta)) {
+            throw new RuntimeException("El detalle de venta no existe");
+        }
         detalleVentaRepository.deleteById(codigoDetalleVenta);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existePorCodigo(int codigoDetalleVenta) {
+    public boolean existePorCodigo(Long codigoDetalleVenta) {
         return detalleVentaRepository.existsById(codigoDetalleVenta);
     }
 
@@ -66,6 +68,10 @@ public class DetalleVentaService implements IDetalleVentaService{
 
         if (detalleVenta.getSubTotal() == null || detalleVenta.getSubTotal().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("El subtotal debe ser mayor a 0");
+        }
+
+        if (detalleVenta.getCodigoProducto() == null) {
+            throw new IllegalArgumentException("Debe asignar un producto al detalle");
         }
     }
 }
