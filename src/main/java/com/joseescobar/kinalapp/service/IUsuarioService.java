@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface IUsuarioService {
     List<Usuario> listarTodos();
     Usuario guardar(Usuario usuario);
-    Optional<Usuario> buscarPorCodigo(int codigoUsuario);
-    Usuario actualizar(int codigoUsuario, Usuario usuario);
-    void eliminar(int codigoUsuario);
-    boolean existePorCodigo(int codigoUsuario);
+    Optional<Usuario> buscarPorCodigo(Long codigoUsuario);
+    Usuario actualizar(Long codigoUsuario, Usuario usuario);
+    void eliminar(Long codigoUsuario);
+    boolean existePorCodigo(Long codigoUsuario);
     List<Usuario> findByEstado(int estado);
 }
