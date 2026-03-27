@@ -31,12 +31,12 @@ public class ProductoService implements IProductoService{
     }
 
     @Override
-    public Optional<Producto> buscarPorCodigo(int codigoProducto) {
+    public Optional<Producto> buscarPorCodigo(Long codigoProducto) {
         return productoRepository.findById(codigoProducto);
     }
 
     @Override
-    public Producto actualizar(int codigoProducto, Producto producto) {
+    public Producto actualizar(Long codigoProducto, Producto producto) {
         if(!productoRepository.existsById(codigoProducto))
             throw new RuntimeException("El producto no existe");
         producto.setCodigoProducto(codigoProducto);
@@ -45,7 +45,7 @@ public class ProductoService implements IProductoService{
     }
 
     @Override
-    public void eliminar(int codigoProducto) {
+    public void eliminar(Long codigoProducto) {
         if(!productoRepository.existsById(codigoProducto))
             throw new RuntimeException("El producto no existe");
         productoRepository.deleteById(codigoProducto);
@@ -53,7 +53,7 @@ public class ProductoService implements IProductoService{
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existePorCodigo(int codigoProducto) {
+    public boolean existePorCodigo(Long codigoProducto) {
         return productoRepository.existsById(codigoProducto);
     }
 
