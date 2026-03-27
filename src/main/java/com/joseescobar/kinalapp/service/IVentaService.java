@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface IVentaService {
     List<Venta> listarTodos();
     Venta guardar(Venta venta);
-    Optional<Venta> buscarPorCodigo(int codigoVenta);
-    Venta actualizar(int codigoVenta, Venta venta);
-    void eliminar(int codigoVenta);
-    boolean existePorCodigo(int codigoVenta);
+    Optional<Venta> buscarPorCodigo(Long codigoVenta);
+    Venta actualizar(Long codigoVenta, Venta venta);
+    void eliminar(Long codigoVenta);
+    boolean existePorCodigo(Long codigoVenta);
     List<Venta> findByEstado(int estado);
 }
