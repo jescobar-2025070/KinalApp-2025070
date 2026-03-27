@@ -1,19 +1,16 @@
 package com.joseescobar.kinalapp.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
+import jakarta.persistence.*; // Importamos todo para incluir GeneratedValue
 import java.math.BigDecimal;
 
 @Entity
 @Table(name="Productos")
 public class Producto {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo_producto")
-    private int codigoProducto;
-    @Column
+    private Long codigoProducto;
+    @Column(name = "nombre_producto")
     private String nombreProducto;
     @Column(precision = 10, scale = 2)
     private BigDecimal precio;
@@ -25,7 +22,7 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(int codigoProducto, String nombreProducto, BigDecimal precio, int stock, int estado) {
+    public Producto(Long codigoProducto, String nombreProducto, BigDecimal precio, int stock, int estado) {
         this.codigoProducto = codigoProducto;
         this.nombreProducto = nombreProducto;
         this.precio = precio;
@@ -33,11 +30,11 @@ public class Producto {
         this.estado = estado;
     }
 
-    public int getCodigoProducto() {
+    public Long getCodigoProducto() {
         return codigoProducto;
     }
 
-    public void setCodigoProducto(int codigoProducto) {
+    public void setCodigoProducto(Long codigoProducto) {
         this.codigoProducto = codigoProducto;
     }
 
