@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 public class Cliente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="dpi_cliente")
     private Long DPICliente;
 

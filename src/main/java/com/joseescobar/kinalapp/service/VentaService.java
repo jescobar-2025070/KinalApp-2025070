@@ -1,7 +1,11 @@
 package com.joseescobar.kinalapp.service;
 
 
+import com.joseescobar.kinalapp.entity.Cliente;
+import com.joseescobar.kinalapp.entity.Usuario;
 import com.joseescobar.kinalapp.entity.Venta;
+import com.joseescobar.kinalapp.repository.ClienteRepository;
+import com.joseescobar.kinalapp.repository.UsuarioRepository;
 import com.joseescobar.kinalapp.repository.VentaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +17,15 @@ import java.util.Optional;
 @Transactional
 public class VentaService implements IVentaService{
     private final VentaRepository ventaRepository;
+    private final ClienteRepository clienteRepository;       // agregar
+    private final UsuarioRepository usuarioRepository;
 
-    public VentaService(VentaRepository ventaRepository) {
+    public VentaService(VentaRepository ventaRepository,
+                        ClienteRepository clienteRepository,
+                        UsuarioRepository usuarioRepository) {
         this.ventaRepository = ventaRepository;
+        this.clienteRepository = clienteRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
@@ -25,6 +35,17 @@ public class VentaService implements IVentaService{
 
     @Override
     public Venta guardar(Venta venta) {
+        // Resolver cliente desde la BD
+        Cliente cliente = clienteRepository.findById(venta.getCliente().getDPICliente())
+                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado."));
+
+        // Resolver usuario desde la BD
+        Usuario usuario = usuarioRepository.findById(venta.getUsuario().getCodigoUsuario())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado."));
+
+        venta.setCliente(cliente);
+        venta.setUsuario(usuario);
+
         validarVenta(venta);
         return ventaRepository.save(venta);
     }
@@ -36,9 +57,19 @@ public class VentaService implements IVentaService{
 
     @Override
     public Venta actualizar(Long codigoVenta, Venta venta) {
-        if(!ventaRepository.existsById(codigoVenta))
+        if (!ventaRepository.existsById(codigoVenta))
             throw new RuntimeException("El codigo de venta no existe");
+
+        Cliente cliente = clienteRepository.findById(venta.getCliente().getDPICliente())
+                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado."));
+
+        Usuario usuario = usuarioRepository.findById(venta.getUsuario().getCodigoUsuario())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado."));
+
         venta.setCodigoVenta(codigoVenta);
+        venta.setCliente(cliente);
+        venta.setUsuario(usuario);
+
         validarVenta(venta);
         return ventaRepository.save(venta);
     }
