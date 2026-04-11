@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<!--
+    FRAGMENTO: sidebar
+    Uso: <div th:replace="~{fragments/sidebar :: sidebar('clientes')}"></div>
+    El parámetro indica qué ítem del menú debe resaltarse como activo.
+-->
+<nav th:fragment="sidebar(paginaActual)" id="sidebar" class="sidebar bg-dark text-white pt-5">
+    <div class="sidebar-sticky pt-2">
+        <ul class="nav flex-column px-2">
+
+            <li class="nav-item">
+                <a class="nav-link text-white rounded-2 mb-1"
+                   th:classappend="${paginaActual == 'dashboard'} ? 'active bg-primary' : ''"
+                   th:href="@{/dashboard}">
+                    <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                </a>
+            </li>
+
+            <hr class="border-secondary my-2"/>
+            <small class="text-uppercase text-secondary px-2 small fw-semibold">Gestión</small>
+
+            <li class="nav-item">
+                <a class="nav-link text-white rounded-2 mb-1"
+                   th:classappend="${paginaActual == 'clientes'} ? 'active bg-primary' : ''"
+                   th:href="@{/vista/clientes}">
+                    <i class="bi bi-people me-2"></i>Clientes
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white rounded-2 mb-1"
+                   th:classappend="${paginaActual == 'productos'} ? 'active bg-primary' : ''"
+                   th:href="@{/vista/productos}">
+                    <i class="bi bi-box-seam me-2"></i>Productos
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white rounded-2 mb-1"
+                   th:classappend="${paginaActual == 'ventas'} ? 'active bg-primary' : ''"
+                   th:href="@{/vista/ventas}">
+                    <i class="bi bi-receipt me-2"></i>Ventas
+                </a>
+            </li>
+
+            <hr class="border-secondary my-2"/>
+            <small class="text-uppercase text-secondary px-2 small fw-semibold">Admin</small>
+
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link text-white rounded-2 mb-1"
+                   th:classappend="${paginaActual == 'usuarios'} ? 'active bg-primary' : ''"
+                   th:href="@{/vista/usuarios}">
+                    <i class="bi bi-shield-person me-2"></i>Usuarios
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+
+</body>
+</html>
