@@ -98,11 +98,11 @@ body {
 }
 
 .k-logo-slot {
-  width: 36px;
-  height: 36px;
+  width: 37px;
+  height: 37px;
   border-radius: 8px;
   overflow: hidden;
-  background: var(--k-teal-xdk);
+  background: var(--k-surface);
   display: flex;
   align-items: center;
   justify-content: center;
