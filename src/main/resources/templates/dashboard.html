@@ -13,6 +13,13 @@
 
     <header class="k-navbar">
         <button class="k-toggle-btn" id="sidebarToggle" type="button"><i class="bi bi-list"></i></button>
+        <a class="k-navbar-brand" th:href="@{/dashboard}" style="margin-left:8px;">
+            <div class="k-logo-slot">
+                <img th:src="@{/images/logoalt.png}" alt="Logo"/>
+            </div>
+            <span class="k-brand-name">KinalApp</span>
+        </a>
+
         <div class="flex-1"></div>
         <div class="k-navbar-user">
             <i class="bi bi-person-circle" style="font-size:16px;color:var(--k-teal)"></i>
@@ -25,7 +32,6 @@
             <a class="k-navbar-brand" th:href="@{/dashboard}">
                 <div class="k-logo-slot">
                     <img th:src="@{/images/logo.png}" alt="Logo"/>
-                    <span class="k-logo-fallback">K</span>
                 </div>
                 <span class="k-brand-name">KinalApp</span>
             </a>
