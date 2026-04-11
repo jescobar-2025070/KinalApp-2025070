@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}" href="/images/favicon.ico"/>
+    <title>Venta | KinalApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/kinalapp.css}"/>
+</head><body>
+
+    <header class="k-navbar">
+        <button class="k-toggle-btn" id="sidebarToggle" type="button"><i class="bi bi-list"></i></button>
+        <a class="k-navbar-brand" th:href="@{/dashboard}" style="margin-left:8px;">
+            <div class="k-logo-slot">
+                <img th:src="@{/images/logoalt.png}" alt="Logo"/>
+            </div>
+            <span class="k-brand-name">KinalApp</span>
+        </a>
+
+        <div class="flex-1"></div>
+        <div class="k-navbar-user">
+            <i class="bi bi-person-circle" style="font-size:16px;color:var(--k-teal)"></i>
+            <strong sec:authentication="name">Usuario</strong>
+        </div>
+    </header>
+    <div id="wrapper" style="display:flex;">
+    <nav id="kSidebar" class="k-sidebar">
+        <div class="k-sidebar-header">
+            <a class="k-navbar-brand" th:href="@{/dashboard}">
+                <div class="k-logo-slot">
+                    <img th:src="@{/images/logo.png}" alt="Logo"/>
+                </div>
+                <span class="k-brand-name">KinalApp</span>
+            </a>
+        </div>
+        <div class="k-sidebar-body">
+            <div class="k-nav-section">
+                <span class="k-nav-label">Principal</span>
+                <ul class="list-unstyled mb-0">
+                <li><a class="k-nav-link" th:href="@{/dashboard}"><span class="k-nav-icon"><i class="bi bi-speedometer2"></i></span>Dashboard</a></li>
+                <li><a class="k-nav-link" th:href="@{/vista/clientes}"><span class="k-nav-icon"><i class="bi bi-people"></i></span>Clientes</a></li>
+                <li><a class="k-nav-link" th:href="@{/vista/productos}"><span class="k-nav-icon"><i class="bi bi-box-seam"></i></span>Productos</a></li>
+                <li><a class="k-nav-link active" th:href="@{/vista/ventas}"><span class="k-nav-icon"><i class="bi bi-receipt"></i></span>Ventas</a></li>
+                <li><a class="k-nav-link" th:href="@{/vista/detalles}"><span class="k-nav-icon"><i class="bi bi-list-check"></i></span>Detalle de Ventas</a></li>
+                </ul>
+            </div>
+            <div class="k-nav-section" sec:authorize="hasRole('ADMIN')">
+                <span class="k-nav-label">Administración</span>
+                <ul class="list-unstyled mb-0">
+                    <li><a class="k-nav-link" th:href="@{/vista/usuarios}"><span class="k-nav-icon"><i class="bi bi-shield-person"></i></span>Usuarios</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="k-sidebar-footer">
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="k-logout-btn">
+                    <span class="k-nav-icon"><i class="bi bi-box-arrow-right"></i></span>Cerrar sesión
+                </button>
+            </form>
+        </div>
+    </nav>
+        <div id="page-content">
+            <div style="padding:28px 28px 40px;"><nav class="k-breadcrumb"><a href="/dashboard" th:href="@{/dashboard}">Dashboard</a><span class="sep">/</span><a href="/vista/ventas" th:href="@{/vista/ventas}">Ventas</a><span class="sep">/</span><span class="current">Formulario</span></nav>
+                <div style="max-width:700px;margin:0 auto;"><div class="k-card">
+                    <div class="k-card-header"><h2 class="k-card-title"><i class="bi bi-receipt"></i><span th:text="${venta.codigoVenta != null ? 'Editar Venta' : 'Registrar Nueva Venta'}">Venta</span></h2></div>
+                    <div class="k-card-body">
+                        <form th:action="@{/vista/ventas/guardar}" th:object="${venta}" method="post" class="k-needs-validation" novalidate>
+                            <input type="hidden" th:field="*{codigoVenta}"/>
+                            <div class="" style="display:grid;grid-template-columns:1fr 2fr;gap:16px;">
+                                <div class="k-form-group"><label class="k-label">Fecha de Venta <span class="req">*</span></label><input type="date" th:field="*{fechaVenta}" class="k-input" required/></div>
+                                <div class="k-form-group"><label class="k-label">Total (Q) <span class="req">*</span></label><div class="k-input-group"><span class="k-input-prefix">Q</span><input type="number" th:field="*{total}" class="k-input" placeholder="0.00" step="0.01" min="0.01" required/></div></div>
+                            </div>
+                            <div class="k-form-group"><label class="k-label">Cliente <span class="req">*</span></label>
+                                <select name="cliente.DPICliente" class="k-select" required>
+                                    <option value="">-- Selecciona un cliente --</option>
+                                    <option th:each="c : ${clientes}" th:value="${c.DPICliente}" th:text="${c.nombreCliente + ' ' + c.apellidoCliente + ' (DPI: ' + c.DPICliente + ')'}" th:selected="${venta.cliente != null and venta.cliente.DPICliente == c.DPICliente}"></option>
+                                </select>
+                            </div>
+                            <div class="k-form-group"><label class="k-label">Vendedor <span class="req">*</span></label>
+                                <select name="usuario.codigoUsuario" class="k-select" required>
+                                    <option value="">-- Selecciona un vendedor --</option>
+                                    <option th:each="u : ${usuarios}" th:value="${u.codigoUsuario}" th:text="${u.getUserName() + ' (' + u.email + ')'}" th:selected="${venta.usuario != null and venta.usuario.codigoUsuario == u.codigoUsuario}"></option>
+                                </select>
+                            </div>
+                            <div class="k-form-group" style="margin-bottom:28px;"><label class="k-label">Estado</label><select th:field="*{estado}" class="k-select"><option value="1">Activa</option><option value="0">Inactiva</option></select></div>
+                            <div class="d-flex gap-2 justify-end">
+                                <a th:href="@{/vista/ventas}" class="k-btn k-btn-ghost">Cancelar</a>
+                                <button type="submit" class="k-btn k-btn-primary"><i class="bi bi-floppy"></i><span th:text="${venta.codigoVenta != null ? 'Guardar cambios' : 'Registrar venta'}">Guardar</span></button>
+                            </div>
+                        </form>
+                    </div>
+                </div></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/kinalapp.js}"></script>
+</body></html>
