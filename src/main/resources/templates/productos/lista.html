@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}" href="/images/favicon.ico"/>
+    <title>Productos | KinalApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/kinalapp.css}"/>
+</head><body>
+
+    <header class="k-navbar">
+        <button class="k-toggle-btn" id="sidebarToggle" type="button"><i class="bi bi-list"></i></button>
+        <a class="k-navbar-brand" th:href="@{/dashboard}" style="margin-left:8px;">
+            <div class="k-logo-slot">
+                <img th:src="@{/images/logoalt.png}" alt="Logo"/>
+            </div>
+            <span class="k-brand-name">KinalApp</span>
+        </a>
+
+        <div class="flex-1"></div>
+        <div class="k-navbar-user">
+            <i class="bi bi-person-circle" style="font-size:16px;color:var(--k-teal)"></i>
+            <strong sec:authentication="name">Usuario</strong>
+        </div>
+    </header>
+    <div id="wrapper" style="display:flex;">
+    <nav id="kSidebar" class="k-sidebar">
+        <div class="k-sidebar-header">
+            <a class="k-navbar-brand" th:href="@{/dashboard}">
+                <div class="k-logo-slot">
+                    <img th:src="@{/images/logo.png}" alt="Logo"/>
+                </div>
+                <span class="k-brand-name">KinalApp</span>
+            </a>
+        </div>
+        <div class="k-sidebar-body">
+            <div class="k-nav-section">
+                <span class="k-nav-label">Principal</span>
+                <ul class="list-unstyled mb-0">
+                <li><a class="k-nav-link" th:href="@{/dashboard}"><span class="k-nav-icon"><i class="bi bi-speedometer2"></i></span>Dashboard</a></li>
+                <li><a class="k-nav-link" th:href="@{/vista/clientes}"><span class="k-nav-icon"><i class="bi bi-people"></i></span>Clientes</a></li>
+                <li><a class="k-nav-link active" th:href="@{/vista/productos}"><span class="k-nav-icon"><i class="bi bi-box-seam"></i></span>Productos</a></li>
+                <li><a class="k-nav-link" th:href="@{/vista/ventas}"><span class="k-nav-icon"><i class="bi bi-receipt"></i></span>Ventas</a></li>
+                <li><a class="k-nav-link" th:href="@{/vista/detalles}"><span class="k-nav-icon"><i class="bi bi-list-check"></i></span>Detalle de Ventas</a></li>
+                </ul>
+            </div>
+            <div class="k-nav-section" sec:authorize="hasRole('ADMIN')">
+                <span class="k-nav-label">Administración</span>
+                <ul class="list-unstyled mb-0">
+                    <li><a class="k-nav-link" th:href="@{/vista/usuarios}"><span class="k-nav-icon"><i class="bi bi-shield-person"></i></span>Usuarios</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="k-sidebar-footer">
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="k-logout-btn">
+                    <span class="k-nav-icon"><i class="bi bi-box-arrow-right"></i></span>Cerrar sesión
+                </button>
+            </form>
+        </div>
+    </nav>
+        <div id="page-content">
+            <div style="padding:28px 28px 40px;">
+            <div th:if="${exito}" class="k-alert k-alert-success" data-auto-close>
+                <i class="bi bi-check-circle-fill"></i><span th:text="${exito}"></span>
+                <button class="k-alert-close" type="button">&#x2715;</button>
+            </div>
+            <div th:if="${error}" class="k-alert k-alert-danger" data-auto-close>
+                <i class="bi bi-exclamation-triangle-fill"></i><span th:text="${error}"></span>
+                <button class="k-alert-close" type="button">&#x2715;</button>
+            </div>
+                <div class="k-page-header">
+                    <div><h1 class="k-page-title"><span class="k-title-icon" style="background:rgba(47,124,140,0.15);color:var(--k-ocean)"><i class="bi bi-box-seam"></i></span>Productos</h1><p class="k-page-sub">Catálogo de productos disponibles</p></div>
+                    <a th:href="@{/vista/productos/nuevo}" class="k-btn k-btn-primary"><i class="bi bi-plus-lg"></i> Nuevo Producto</a>
+                </div>
+                <div class="k-card">
+                    <div class="k-card-header">
+                        <h2 class="k-card-title">Total <span class="k-chip k-chip-count" th:text="${#lists.size(productos)}">0</span></h2>
+                        <div class="k-search"><i class="bi bi-search k-search-icon"></i><input type="text" id="buscador" class="k-input" placeholder="Buscar..." style="width:220px;"/></div>
+                    </div>
+                    <div class="k-card-body no-pad"><div class="k-table-wrap"><table class="k-table">
+                        <thead><tr><th>#</th><th>Nombre</th><th class="text-end">Precio</th><th class="text-center">Stock</th><th class="text-center">Estado</th><th class="text-center">Acciones</th></tr></thead>
+                        <tbody>
+                            <tr th:each="p : ${productos}">
+                                <td class="mono" th:text="${p.codigoProducto}">—</td>
+                                <td style="font-weight:500;" th:text="${p.nombreProducto}">—</td>
+                                <td class="text-end" style="color:var(--k-teal);font-weight:600;">Q <span th:text="${#numbers.formatDecimal(p.precio,1,2)}">0.00</span></td>
+                                <td class="text-center"><span th:text="${p.stock}" th:class="${p.stock <= 5} ? 'k-chip k-chip-danger' : 'k-chip k-chip-muted'">0</span></td>
+                                <td class="text-center"><span th:if="${p.estado==1}" class="k-chip k-chip-success">Activo</span><span th:if="${p.estado!=1}" class="k-chip k-chip-muted">Inactivo</span></td>
+                                <td class="text-center"><div class="d-flex gap-2" style="justify-content:center;">
+                                    <a th:href="@{/vista/productos/editar/}+${p.codigoProducto}" class="k-btn k-btn-ghost k-btn-icon"><i class="bi bi-pencil"></i></a>
+                                    <button class="k-btn k-btn-danger k-btn-icon" th:attr="data-id=${p.codigoProducto},data-nombre=${p.nombreProducto}" onclick="abrirModalEliminar(this,'/vista/productos/eliminar/')"><i class="bi bi-trash3"></i></button>
+                                </div></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(productos)}"><td colspan="6" style="text-align:center;padding:48px;color:var(--k-muted);"><i class="bi bi-box" style="font-size:2.5rem;display:block;margin-bottom:10px;"></i>Sin productos. <a th:href="@{/vista/productos/nuevo}" style="color:var(--k-teal);">Agregar el primero</a></td></tr>
+                        </tbody>
+                    </table></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="k-modal-overlay" id="modalEliminar">
+        <div class="k-modal">
+            <div class="k-modal-header">
+                <h5 class="k-modal-title"><i class="bi bi-trash3"></i> Confirmar eliminación</h5>
+                <button class="k-toggle-btn" data-close-modal="modalEliminar">&#x2715;</button>
+            </div>
+            <div class="k-modal-body">
+                ¿Deseas eliminar <strong id="nombreModal"></strong>? Esta acción no se puede deshacer.
+            </div>
+            <div class="k-modal-footer">
+                <button class="k-btn k-btn-ghost" data-close-modal="modalEliminar">Cancelar</button>
+                <a id="btnConfirmar" href="#" class="k-btn k-btn-danger"><i class="bi bi-trash"></i> Eliminar</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/kinalapp.js}"></script>
+<script>
+function abrirModalEliminar(btn, baseUrl) {
+    document.getElementById('nombreModal').textContent = btn.getAttribute('data-nombre') || '#'+btn.getAttribute('data-id');
+    document.getElementById('btnConfirmar').href = baseUrl + btn.getAttribute('data-id');
+    kModal.open('modalEliminar');
+}
+</script>
+</body></html>
