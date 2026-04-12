@@ -43,28 +43,46 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Deshabilitar para facilitar pruebas con Postman/APIs
-                .authorizeHttpRequests(auth -> auth
-                        // 1. RUTAS PÚBLICAS
-                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll() // Permitir registro
-                        .requestMatchers("/login", "/publico/**").permitAll()
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
 
-                        // 2. RUTAS PROTEGIDAS (Requieren Login)
-                        .requestMatchers("/clientes/**").authenticated()
-                        .requestMatchers("/productos/**").authenticated()
-                        .requestMatchers("/ventas/**").authenticated()
-                        .requestMatchers("/detalles/**").authenticated()
+                // ── Recursos estáticos y registro ─────────────────────────────
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()   // API registro
+                .requestMatchers("/registro", "/registro/**").permitAll()    // Vista registro
 
-                        // 3. SEGURIDAD EXTRA PARA USUARIOS
-                        // Solo un admin debería poder listar o borrar otros usuarios
-                        .requestMatchers(HttpMethod.GET, "/usuarios/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasRole("ADMIN")
+                // ── API REST (sigue funcionando con Basic Auth) ────────────────
+                .requestMatchers("/clientes/**").authenticated()
+                .requestMatchers("/productos/**").authenticated()
+                .requestMatchers("/ventas/**").authenticated()
+                .requestMatchers("/detalles/**").authenticated()
+                .requestMatchers(HttpMethod.GET,    "/usuarios/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasRole("ADMIN")
 
-                        .anyRequest().authenticated() // Cualquier otra ruta no especificada pide login
-                )
-                .httpBasic(Customizer.withDefaults()) // Permite autenticación básica para probar en Postman
-                .formLogin(form -> form.permitAll())   // Habilita el formulario de login de Spring
-                .logout(logout -> logout.permitAll());
+                // ── Vistas Thymeleaf ───────────────────────────────────────────
+                .requestMatchers("/dashboard/**").authenticated()
+                .requestMatchers("/vista/clientes/**").authenticated()
+                .requestMatchers("/vista/productos/**").authenticated()
+                .requestMatchers("/vista/ventas/**").authenticated()
+                .requestMatchers("/vista/usuarios/**").hasRole("ADMIN")
+
+                .anyRequest().authenticated()
+            )
+            // Login form de Spring Security apuntando a nuestra vista personalizada
+            .formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/dashboard", true)
+                .failureUrl("/login?error=true")
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout=true")
+                .permitAll()
+            )
+            // Mantener Basic Auth para clientes API (Postman, etc.)
+            .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
