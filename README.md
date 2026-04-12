@@ -1,48 +1,52 @@
 # KinalApp — Sistema de Gestión de Ventas
 
-**KinalApp** es una aplicación de servidor (API REST) desarrollada en Java con Spring Boot, diseñada para gestionar clientes, productos, ventas y usuarios de manera segura. Fue creada como proyecto académico en el Instituto Técnico Kinal.
+**KinalApp** es una aplicación web full-stack desarrollada en Java con Spring Boot. Permite gestionar clientes, productos, ventas y su detalle de manera segura, con una interfaz visual propia basada en Material Design y una API REST disponible para integraciones externas.
 
 ---
 
 ## Tabla de Contenidos
 
-1. [¿Qué hace esta aplicación?](#-qué-hace-esta-aplicación)
-2. [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-3. [Estructura del Proyecto](#-estructura-del-proyecto)
-4. [Requisitos Previos](#-requisitos-previos)
-5. [Instalación paso a paso](#-instalación-paso-a-paso)
-6. [Configuración de la Base de Datos](#-configuración-de-la-base-de-datos)
-7. [Ejecutar la Aplicación](#-ejecutar-la-aplicación)
-8. [Endpoints de la API](#-endpoints-de-la-api)
-9. [Seguridad y Autenticación](#-seguridad-y-autenticación)
-10. [Modelo de Base de Datos](#-modelo-de-base-de-datos)
-11. [Capturas de Pantalla](#-capturas-de-pantalla)
+1. [¿Qué hace esta aplicación?](#qué-hace-esta-aplicación)
+2. [Tecnologías Utilizadas](#tecnologías-utilizadas)
+3. [Estructura del Proyecto](#estructura-del-proyecto)
+4. [Requisitos Previos](#requisitos-previos)
+5. [Configuración de la Base de Datos](#configuración-de-la-base-de-datos)
+6. [Instalación paso a paso](#instalación-paso-a-paso)
+7. [Ejecutar la Aplicación](#ejecutar-la-aplicación)
+8. [Interfaz Web (Frontend)](#interfaz-web-frontend)
+9. [API REST — Endpoints](#api-rest--endpoints)
+10. [Seguridad y Autenticación](#seguridad-y-autenticación)
+11. [Modelo de Base de Datos](#modelo-de-base-de-datos)
+12. [Autor](#autor)
+13. [Capturas de Pantalla](#capturas-de-pantalla)
 
 ---
 
 ## ¿Qué hace esta aplicación?
 
-KinalApp es un **sistema de gestión de ventas** que funciona como un servicio web. Esto significa que no tiene pantallas propias, sino que expone una serie de servicios (llamados *endpoints*) a los que otras aplicaciones o herramientas de prueba (como Postman) pueden conectarse para:
+KinalApp es un **sistema de gestión de ventas** con dos capas de acceso:
 
-- **Registrar y administrar clientes** (con su DPI, nombre, dirección y estado)
-- **Gestionar un catálogo de productos** (nombre, precio, stock y estado)
-- **Registrar ventas** (asociadas a un usuario y un cliente)
-- **Registrar el detalle de cada venta** (qué productos se vendieron, en qué cantidad y a qué precio)
-- **Administrar usuarios** del sistema con roles y contraseñas encriptadas
-- **Proteger la información** mediante autenticación: solo los usuarios registrados pueden acceder a los datos
+**Interfaz web (para usuarios finales):** Un panel con diseño Material Design oscuro, accesible desde el navegador en `http://localhost:8000`, que permite iniciar sesión, ver estadísticas en un dashboard, y gestionar clientes, productos, ventas, detalle de ventas y usuarios del sistema.
+
+**API REST (para integraciones y pruebas con Postman):** Los mismos datos son accesibles mediante peticiones HTTP estándar con autenticación básica, sin necesidad de usar la interfaz web.
 
 ---
 
 ## Tecnologías Utilizadas
 
-| Tecnología | Versión | ¿Para qué sirve? |
+| Tecnología | Versión | Para qué sirve |
 |---|---|---|
 | **Java** | 21 | Lenguaje de programación principal |
-| **Spring Boot** | 4.0.2 | Marco de trabajo que facilita crear aplicaciones Java |
-| **Spring Security + JWT** | - | Seguridad: controla quién puede acceder a qué |
-| **Spring Data JPA** | - | Comunicación con la base de datos sin escribir SQL manualmente |
-| **MySQL** | 8+ | Base de datos donde se guardan todos los datos |
-| **Maven** | - | Herramienta que descarga las librerías necesarias automáticamente |
+| **Spring Boot** | 4.0.2 | Marco de trabajo principal |
+| **Spring MVC + Thymeleaf** | — | Motor de plantillas para el frontend web |
+| **Spring Security** | — | Autenticación y control de acceso |
+| **JWT (jjwt)** | 0.11.5 | Tokens de autenticación para la API |
+| **Spring Data JPA / Hibernate** | — | Comunicación con la base de datos |
+| **MySQL** | 8+ | Base de datos relacional |
+| **Maven** | — | Gestión de dependencias |
+| **Bootstrap 5** | 5.3.3 | Grid y utilidades base del frontend |
+| **Bootstrap Icons** | 1.11.3 | Iconografía de la interfaz |
+| **DM Sans / DM Mono** | — | Tipografía del sistema de diseño |
 
 ---
 
@@ -53,260 +57,274 @@ KinalApp/
 ├── src/
 │   └── main/
 │       ├── java/com/joseescobar/kinalapp/
-│       │   ├── controller/       ← Reciben las peticiones HTTP (GET, POST, PUT, DELETE)
+│       │   ├── KinalAppApplication.java              ← Punto de entrada
+│       │   ├── SecurityConfig.java                   ← Configuración de seguridad
+│       │   │
+│       │   ├── controller/                           ← Controladores REST (devuelven JSON)
 │       │   │   ├── ClienteController.java
 │       │   │   ├── ProductoController.java
 │       │   │   ├── VentaController.java
 │       │   │   ├── DetalleVentaController.java
 │       │   │   └── UsuarioController.java
-│       │   ├── entity/           ← Representan las tablas de la base de datos
+│       │   │
+│       │   ├── controller/  (vistas Thymeleaf)       ← Controladores del frontend web
+│       │   │   ├── DashboardController.java
+│       │   │   ├── ClienteViewController.java
+│       │   │   ├── ProductoViewController.java
+│       │   │   ├── VentaViewController.java
+│       │   │   ├── DetalleVentaViewController.java
+│       │   │   ├── UsuarioViewController.java
+│       │   │   └── RegistroController.java
+│       │   │
+│       │   ├── entity/                               ← Modelos de datos (tablas BD)
 │       │   │   ├── Cliente.java
 │       │   │   ├── Producto.java
 │       │   │   ├── Venta.java
 │       │   │   ├── DetalleVenta.java
 │       │   │   └── Usuario.java
-│       │   ├── repository/       ← Se encargan de guardar y leer datos
-│       │   ├── service/          ← Contienen la lógica de negocio
-│       │   └── security/         ← Configuración de seguridad y JWT
+│       │   │
+│       │   ├── repository/                           ← Acceso a la base de datos
+│       │   │   ├── ClienteRepository.java
+│       │   │   ├── ProductoRepository.java
+│       │   │   ├── VentaRepository.java
+│       │   │   ├── DetalleVentaRepository.java
+│       │   │   └── UsuarioRepository.java
+│       │   │
+│       │   ├── service/                              ← Lógica de negocio
+│       │   │   ├── IClienteService.java / ClienteService.java
+│       │   │   ├── IProductoService.java / ProductoService.java
+│       │   │   ├── IVentaService.java / VentaService.java
+│       │   │   ├── IDetalleVentaService.java / DetalleVentaService.java
+│       │   │   └── IUsuarioService.java / UsuarioService.java
+│       │   │
+│       │   └── security/                             ← Filtros JWT
+│       │       ├── JwtService.java
+│       │       └── JwtAuthenticationFilter.java
+│       │
 │       └── resources/
-│           └── application.properties  ← Configuración de la app (BD, puerto, etc.)
-├── kinalappdb.mwb               ← Modelo de base de datos (abrir con MySQL Workbench)
-└── pom.xml                      ← Lista de librerías que necesita el proyecto
+│           ├── application.properties                ← Configuración (BD, puerto, JWT)
+│           │
+│           ├── templates/                            ← Vistas HTML (Thymeleaf)
+│           │   ├── login.html
+│           │   ├── registro.html
+│           │   ├── dashboard.html
+│           │   ├── clientes/lista.html, formulario.html
+│           │   ├── productos/lista.html, formulario.html
+│           │   ├── ventas/lista.html, formulario.html
+│           │   ├── detalles/lista.html, formulario.html
+│           │   ├── usuarios/lista.html, formulario.html
+│           │   └── fragments/navbar.html, sidebar.html
+│           │
+│           └── static/
+│               ├── css/kinalapp.css                  ← Sistema de diseño Material Design
+│               ├── js/kinalapp.js                    ← Sidebar, buscador, validaciones
+│               └── images/
+│                   ├── favicon.svg                   ← Favicon por defecto (reemplazable)
+│                   └── INSTRUCCIONES.txt             ← Guía para logo y favicon propios
+│
+├── kinalappdb.mwb                                    ← Modelo visual de BD (MySQL Workbench)
+└── pom.xml                                           ← Dependencias del proyecto
 ```
 
 ---
 
 ## Requisitos Previos
 
-Antes de poder ejecutar esta aplicación, necesitas instalar los siguientes programas en tu computadora. A continuación se explica qué es cada uno y cómo instalarlo:
-
 ### 1. Java Development Kit (JDK) 21
 
-Java es el lenguaje en que está escrita la aplicación. Sin él, no puede funcionar.
-
-**¿Cómo instalarlo?**
-1. Ingresa a: https://www.oracle.com/java/technologies/downloads/#java21
-2. Descarga la versión para tu sistema operativo (Windows, Mac o Linux)
-3. Ejecuta el instalador y sigue los pasos (siguiente → siguiente → finalizar)
-4. Para verificar que quedó bien instalado, abre una **ventana de comandos** (en Windows: busca "cmd" en el menú inicio) y escribe:
+1. Descarga desde: https://www.oracle.com/java/technologies/downloads/#java21
+2. Instala siguiendo el asistente de tu sistema operativo
+3. Verifica con:
    ```
    java -version
    ```
-   Deberías ver algo como: `java version "21.x.x"`
-
----
+   Deberías ver: `java version "21.x.x"`
 
 ### 2. MySQL Community Server 8+
 
-MySQL es el sistema de base de datos donde la aplicación guardará toda la información.
+1. Descarga desde: https://dev.mysql.com/downloads/installer/
+2. Selecciona **"Developer Default"** durante la instalación
+3. Anota la contraseña del usuario `root`
+4. Instala **MySQL Workbench** cuando el instalador lo ofrezca
 
-**¿Cómo instalarlo?**
-1. Ingresa a: https://dev.mysql.com/downloads/installer/
-2. Descarga **MySQL Installer for Windows** (o la versión de tu sistema operativo)
-3. Durante la instalación, selecciona **"Developer Default"**
-4. Cuando te pida una contraseña para el usuario `root`, guárdala bien — la necesitarás después
-5. También instala **MySQL Workbench** si el instalador te lo ofrece (es una herramienta visual para ver la base de datos)
+### 3. Maven (opcional)
 
----
+El proyecto incluye el script `mvnw` que funciona sin instalar Maven. Si aun así lo necesitas: https://maven.apache.org/download.cgi
 
-### 3. Maven (opcional si usas el wrapper incluido)
+### 4. IDE recomendado (opcional)
 
-Maven descarga automáticamente todas las librerías que necesita el proyecto. El proyecto ya incluye un script llamado `mvnw` (Maven Wrapper) que **no requiere instalar Maven por separado** en la mayoría de casos.
-
-Si aun así necesitas instalarlo manualmente:
-1. Ingresa a: https://maven.apache.org/download.cgi
-2. Descarga el archivo `.zip`
-3. Extráelo y configura la variable de entorno `MAVEN_HOME`
-
----
-
-### 4. IDE recomendado: IntelliJ IDEA o VS Code (opcional pero recomendado)
-
-Un IDE es un editor de código avanzado que facilita abrir y ejecutar el proyecto.
-
-- **IntelliJ IDEA Community (gratuito):** https://www.jetbrains.com/idea/download/
-- **VS Code:** https://code.visualstudio.com/ (instalar extensión "Extension Pack for Java")
+- **IntelliJ IDEA Community:** https://www.jetbrains.com/idea/download/
+- **VS Code** con "Extension Pack for Java": https://code.visualstudio.com/
 
 ---
 
 ## Configuración de la Base de Datos
 
-### Paso 1: Crear el usuario de MySQL
+### Crear el usuario de MySQL
 
-La aplicación está configurada para conectarse con un usuario específico de MySQL. Abre **MySQL Workbench** o la línea de comandos de MySQL y ejecuta:
+Abre **MySQL Workbench** o la consola de MySQL y ejecuta:
 
 ```sql
--- Crear el usuario que usa la aplicación
 CREATE USER 'IN5AM'@'localhost' IDENTIFIED BY '_odmon5Am';
-
--- Darle todos los permisos sobre la base de datos del proyecto
 GRANT ALL PRIVILEGES ON dbClientes_in5am.* TO 'IN5AM'@'localhost';
-
--- Aplicar los cambios
 FLUSH PRIVILEGES;
 ```
 
-> **Nota:** La base de datos `dbClientes_in5am` se creará automáticamente cuando inicies la aplicación por primera vez. No necesitas crearla manualmente.
+La base de datos `dbClientes_in5am` se crea automáticamente al iniciar la aplicación por primera vez.
 
-### Paso 2: (Opcional) Cargar el modelo de base de datos
+### Archivo de configuración
 
-El archivo `kinalappdb.mwb` contiene el diseño visual de la base de datos. Puedes abrirlo con **MySQL Workbench** para ver cómo están relacionadas las tablas.
+`src/main/resources/application.properties`:
+
+```properties
+spring.application.name=KinalApp
+server.port=8000
+
+spring.datasource.url=jdbc:mysql://localhost:3306/dbClientes_in5am?createDatabaseIfNotExist=true
+spring.datasource.username=IN5AM
+spring.datasource.password=_odmon5Am
+
+jwt.secret.key=NDM0NTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQ=
+jwt.expiration.time=86400000
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jackson.deserialization.fail-on-null-for-primitives=false
+```
+
+Si tu MySQL usa credenciales distintas, actualiza `username` y `password`.
 
 ---
 
 ## Instalación paso a paso
 
-### Paso 1: Descargar el proyecto
+### Paso 1: Obtener el proyecto
 
-**Opción A — Desde GitHub (requiere Git instalado):**
+**Con Git:**
 ```bash
 git clone https://github.com/jescobar-2025070/KinalApp-2025070.git
 cd KinalApp-2025070
 ```
 
-**Opción B — Descarga directa:**
+**Sin Git — descarga ZIP:**
 1. Ve a https://github.com/jescobar-2025070/KinalApp-2025070
-2. Haz clic en el botón verde **"Code"**
-3. Selecciona **"Download ZIP"**
-4. Extrae el archivo ZIP en una carpeta de tu elección
+2. Clic en **"Code"** → **"Download ZIP"**
+3. Extrae el archivo en la carpeta de tu preferencia
 
----
+### Paso 2: Abrir en el IDE
 
-### Paso 2: Abrir el proyecto
+**IntelliJ IDEA:** `File → Open` → selecciona la carpeta. IntelliJ detecta el proyecto Maven y descarga dependencias automáticamente.
 
-Si usas **IntelliJ IDEA:**
-1. Abre IntelliJ IDEA
-2. Selecciona **"Open"** y navega hasta la carpeta del proyecto
-3. IntelliJ detectará automáticamente que es un proyecto Maven y descargará las dependencias
-
-Si usas **VS Code:**
-1. Abre VS Code
-2. Ve a **Archivo → Abrir carpeta** y selecciona la carpeta del proyecto
-3. Asegúrate de tener instalado el "Extension Pack for Java"
-
----
-
-### Paso 3: Revisar la configuración
-
-Antes de ejecutar, verifica el archivo `src/main/resources/application.properties`. Este archivo contiene la configuración de conexión a la base de datos:
-
-```properties
-spring.application.name=KinalApp
-
-# Puerto donde escucha la aplicación
-server.port=8000
-
-# Conexión a MySQL
-spring.datasource.url=jdbc:mysql://localhost:3306/dbClientes_in5am?createDatabaseIfNotExist=true
-spring.datasource.username=IN5AM
-spring.datasource.password=_odmon5Am
-
-# Seguridad JWT
-jwt.secret.key=NDM0NTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQzNTQ=
-jwt.expiration.time=86400000
-
-# Configuración JPA
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-```
-
-> Si tu MySQL tiene un usuario o contraseña diferente, cambia los valores de `username` y `password` aquí.
+**VS Code:** `Archivo → Abrir carpeta` → selecciona la carpeta. Requiere "Extension Pack for Java".
 
 ---
 
 ## Ejecutar la Aplicación
 
-### Opción A: Desde la terminal (línea de comandos)
+### Desde la terminal
 
-1. Abre una terminal o cmd dentro de la carpeta del proyecto
-2. Ejecuta el siguiente comando:
+Dentro de la carpeta raíz del proyecto:
 
-**En Windows:**
+**Windows:**
 ```cmd
 mvnw.cmd spring-boot:run
 ```
 
-**En Mac/Linux:**
+**Mac / Linux:**
 ```bash
 ./mvnw spring-boot:run
 ```
 
-3. Espera a que aparezca un mensaje similar a:
-   ```
-   Started KinalAppApplication in 3.5 seconds
-   ```
-4. La aplicación estará corriendo en: **http://localhost:8000**
+Cuando veas este mensaje, la aplicación está lista:
+```
+Started KinalAppApplication in X.XXX seconds
+```
 
----
+Abre el navegador en: **http://localhost:8000**
 
-### Opción B: Desde IntelliJ IDEA
+### Desde IntelliJ IDEA
 
-1. Abre el archivo `KinalAppApplication.java` (ubicado en `src/main/java/com/joseescobar/kinalapp/`)
-2. Haz clic en el botón ▶️ verde que aparece junto al método `main`
-3. Observa la consola en la parte inferior — cuando diga "Started KinalAppApplication", la app está lista
+1. Abre `KinalAppApplication.java`
+2. Haz clic en el botón ▶️ verde junto al método `main`
 
----
-
-### Opción C: Generar un archivo ejecutable (.jar)
-
-Si quieres empaquetar la aplicación para distribuirla:
+### Generar un ejecutable (.jar)
 
 ```bash
 ./mvnw clean package
-```
-
-Esto generará un archivo `.jar` en la carpeta `target/`. Puedes ejecutarlo con:
-
-```bash
 java -jar target/kinalapp-0.0.1-SNAPSHOT.jar
 ```
 
 ---
 
-## Endpoints de la API
+## Interfaz Web (Frontend)
 
-Una vez que la aplicación esté corriendo, puedes interactuar con ella mediante una herramienta como **Postman** (https://www.postman.com/downloads/) o desde cualquier navegador web para las peticiones GET.
+### Vistas disponibles
 
-La URL base es: `http://localhost:8000`
+| Ruta | Vista | Acceso |
+|---|---|---|
+| `/login` | Formulario de inicio de sesión | Público |
+| `/registro` | Formulario de creación de cuenta | Público |
+| `/dashboard` | Panel con estadísticas generales | Autenticado |
+| `/vista/clientes` | Lista y gestión de clientes | Autenticado |
+| `/vista/productos` | Lista y gestión de productos | Autenticado |
+| `/vista/ventas` | Lista y edición de ventas | Autenticado |
+| `/vista/detalles` | Lista y edición de detalle de ventas | Autenticado |
+| `/vista/usuarios` | Gestión de usuarios del sistema | Solo ADMIN |
+
+### Funcionalidades destacadas
+
+**Dashboard:** tarjetas con totales de clientes, productos, ventas y usuarios, más tabla con las últimas 5 ventas registradas.
+
+**Módulos de gestión:** cada módulo incluye lista con buscador en tiempo real, formulario de creación y edición, y confirmación con modal antes de eliminar.
+
+**Ventas y Detalle de Ventas:** la eliminación está desactivada en la interfaz web intencionalmente. Solo están disponibles crear, listar y editar. Si se requiere eliminar, puede hacerse a través de la API REST.
+
+**Formulario de Detalle de Venta:** al seleccionar un producto el precio unitario se rellena automáticamente, y al ingresar la cantidad el subtotal se calcula en tiempo real (cantidad × precio). El botón guardar permanece deshabilitado hasta que el cálculo sea válido.
+
+**Sidebar colapsable:** se oculta con el botón de menú. En móvil se comporta como panel deslizante. El ítem activo se resalta con el color de acento.
 
 ---
 
+## API REST — Endpoints
+
+URL base: `http://localhost:8000`
+
+La API usa **autenticación HTTP básica** — envía usuario y contraseña en cada petición (en Postman: pestaña Authorization → Basic Auth).
+
 ### Usuarios (`/usuarios`)
 
-| Método | URL | Descripción | Requiere autenticación |
-|--------|-----|-------------|----------------------|
-| `POST` | `/usuarios` | Registrar un nuevo usuario | No |
-| `GET` | `/usuarios` | Listar todos los usuarios | Sí (solo ADMIN) |
-| `GET` | `/usuarios/{id}` | Buscar usuario por código | Sí (solo ADMIN) |
-| `GET` | `/usuarios/estado/{estado}` | Listar usuarios por estado (1=activo, 0=inactivo) | Sí (solo ADMIN) |
-| `PUT` | `/usuarios/{id}` | Actualizar un usuario | Sí |
-| `DELETE` | `/usuarios/{id}` | Eliminar un usuario | Sí (solo ADMIN) |
+| Método | URL | Descripción | Auth requerida |
+|---|---|---|---|
+| `POST` | `/usuarios` | Crear usuario | No |
+| `GET` | `/usuarios` | Listar todos | Sí — ADMIN |
+| `GET` | `/usuarios/{id}` | Buscar por código | Sí — ADMIN |
+| `GET` | `/usuarios/estado/{estado}` | Filtrar por estado | Sí — ADMIN |
+| `PUT` | `/usuarios/{id}` | Actualizar | Sí |
+| `DELETE` | `/usuarios/{id}` | Eliminar | Sí — ADMIN |
 
-**Ejemplo para crear un usuario (body JSON):**
+**Body para crear usuario:**
 ```json
 {
   "userName": "admin",
-  "password": "mi_contraseña",
+  "password": "mi_contrasena",
   "email": "admin@kinal.edu.gt",
   "rol": "ADMIN",
   "estado": 1
 }
 ```
 
----
-
 ### Clientes (`/clientes`)
 
-| Método | URL | Descripción | Requiere autenticación |
-|--------|-----|-------------|----------------------|
-| `GET` | `/clientes` | Listar todos los clientes | Sí |
-| `GET` | `/clientes/{dpi}` | Buscar cliente por DPI | Sí |
-| `GET` | `/clientes/estado/{estado}` | Listar clientes por estado | Sí |
-| `POST` | `/clientes` | Crear un nuevo cliente | Sí |
-| `PUT` | `/clientes/{dpi}` | Actualizar datos de un cliente | Sí |
-| `DELETE` | `/clientes/{dpi}` | Eliminar un cliente | Sí |
+| Método | URL | Descripción | Auth requerida |
+|---|---|---|---|
+| `GET` | `/clientes` | Listar todos | Sí |
+| `GET` | `/clientes/{dpi}` | Buscar por DPI | Sí |
+| `GET` | `/clientes/estado/{estado}` | Filtrar por estado | Sí |
+| `POST` | `/clientes` | Crear cliente | Sí |
+| `PUT` | `/clientes/{dpi}` | Actualizar | Sí |
+| `DELETE` | `/clientes/{dpi}` | Eliminar | Sí |
 
-**Ejemplo para crear un cliente (body JSON):**
+**Body para crear cliente:**
 ```json
 {
   "DPICliente": 1234567890101,
@@ -317,111 +335,107 @@ La URL base es: `http://localhost:8000`
 }
 ```
 
----
-
 ### Productos (`/productos`)
 
-| Método | URL | Descripción | Requiere autenticación |
-|--------|-----|-------------|----------------------|
-| `GET` | `/productos` | Listar todos los productos | Sí |
-| `GET` | `/productos/{id}` | Buscar producto por código | Sí |
-| `GET` | `/productos/estado/{estado}` | Listar productos por estado | Sí |
-| `POST` | `/productos` | Crear un nuevo producto | Sí |
-| `PUT` | `/productos/{id}` | Actualizar un producto | Sí |
-| `DELETE` | `/productos/{id}` | Eliminar un producto | Sí |
+| Método | URL | Descripción | Auth requerida |
+|---|---|---|---|
+| `GET` | `/productos` | Listar todos | Sí |
+| `GET` | `/productos/{id}` | Buscar por código | Sí |
+| `GET` | `/productos/estado/{estado}` | Filtrar por estado | Sí |
+| `POST` | `/productos` | Crear producto | Sí |
+| `PUT` | `/productos/{id}` | Actualizar | Sí |
+| `DELETE` | `/productos/{id}` | Eliminar | Sí |
 
-**Ejemplo para crear un producto (body JSON):**
+**Body para crear producto:**
 ```json
 {
-  "nombreProducto": "Cuaderno",
+  "nombreProducto": "Cuaderno universitario",
   "precio": 15.50,
   "stock": 100,
   "estado": 1
 }
 ```
 
----
-
 ### Ventas (`/ventas`)
 
-| Método | URL | Descripción | Requiere autenticación |
-|--------|-----|-------------|----------------------|
-| `GET` | `/ventas` | Listar todas las ventas | Sí |
-| `GET` | `/ventas/{id}` | Buscar venta por código | Sí |
-| `GET` | `/ventas/estado/{estado}` | Listar ventas por estado | Sí |
-| `POST` | `/ventas` | Registrar una nueva venta | Sí |
-| `PUT` | `/ventas/{id}` | Actualizar una venta | Sí |
-| `DELETE` | `/ventas/{id}` | Eliminar una venta | Sí |
-
----
+| Método | URL | Descripción | Auth requerida |
+|---|---|---|---|
+| `GET` | `/ventas` | Listar todas | Sí |
+| `GET` | `/ventas/{id}` | Buscar por código | Sí |
+| `GET` | `/ventas/estado/{estado}` | Filtrar por estado | Sí |
+| `POST` | `/ventas` | Registrar venta | Sí |
+| `PUT` | `/ventas/{id}` | Actualizar | Sí |
+| `DELETE` | `/ventas/{id}` | Eliminar | Sí |
 
 ### Detalle de Venta (`/detalles`)
 
-| Método | URL | Descripción | Requiere autenticación |
-|--------|-----|-------------|----------------------|
-| `GET` | `/detalles` | Listar todos los detalles | Sí |
-| `GET` | `/detalles/{id}` | Buscar detalle por código | Sí |
-| `POST` | `/detalles` | Agregar un detalle de venta | Sí |
-| `PUT` | `/detalles/{id}` | Actualizar un detalle | Sí |
-| `DELETE` | `/detalles/{id}` | Eliminar un detalle | Sí |
+| Método | URL | Descripción | Auth requerida |
+|---|---|---|---|
+| `GET` | `/detalles` | Listar todos | Sí |
+| `GET` | `/detalles/{id}` | Buscar por código | Sí |
+| `POST` | `/detalles` | Crear detalle | Sí |
+| `PUT` | `/detalles/{id}` | Actualizar | Sí |
+| `DELETE` | `/detalles/{id}` | Eliminar | Sí |
 
 ---
 
 ## Seguridad y Autenticación
 
-La aplicación usa **autenticación básica HTTP** y **JWT (JSON Web Token)** para proteger los datos.
+### Dos mecanismos que conviven
 
-### ¿Cómo funciona?
+**Interfaz web:** Spring Security gestiona el login con formulario en `/login`. Al autenticarse, Spring crea una sesión en el navegador que protege todas las vistas del panel.
 
-1. **Registro:** Cualquiera puede crear una cuenta enviando un `POST` a `/usuarios`
-2. **Login:** Una vez registrado, puedes iniciar sesión en `/login` con tu usuario y contraseña
-3. **Acceso protegido:** Para consultar clientes, productos, ventas, etc., debes enviar tus credenciales en cada petición
+**API REST:** Autenticación HTTP básica en cada petición. Los tokens JWT están configurados para integraciones externas.
 
-### Roles del sistema
+### Roles
 
 | Rol | Permisos |
-|-----|----------|
-| `ADMIN` | Acceso total: puede ver, crear, editar y eliminar usuarios, clientes, productos y ventas |
-| `USER` | Puede gestionar clientes, productos y ventas, pero NO puede administrar otros usuarios |
+|---|---|
+| `ADMIN` | Acceso total — puede ver, crear, editar y eliminar en todos los módulos incluyendo usuarios |
+| `USER` | Puede gestionar clientes, productos, ventas y detalles, pero no puede acceder al módulo de usuarios |
 
-### Rutas públicas (sin necesidad de iniciar sesión)
+### Rutas públicas (sin autenticación)
 
-- `POST /usuarios` → Crear cuenta
-- `GET /login` → Iniciar sesión
+- `GET /login` — Formulario de acceso
+- `GET /registro` — Formulario de registro
+- `POST /usuarios` — Crear cuenta vía API
 
-### Rutas protegidas (requieren sesión iniciada)
+### Rutas protegidas
 
-- Todo lo relacionado con `/clientes/**`, `/productos/**`, `/ventas/**`, `/detalles/**`
+Todo lo demás requiere sesión activa. Las rutas `/vista/usuarios/**` y los endpoints `GET /usuarios/**` y `DELETE /usuarios/**` requieren además el rol `ADMIN`.
 
 ---
 
 ## Modelo de Base de Datos
 
-La base de datos se llama `dbClientes_in5am` y contiene las siguientes tablas:
+La base de datos se llama `dbClientes_in5am`:
 
 ```
-┌─────────────┐       ┌─────────────┐       ┌──────────────┐
-│  Usuarios   │       │   Clientes  │       │   Productos  │
-│─────────────│       │─────────────│       │──────────────│
-│ codigo_usr  │       │ dpi_cliente │       │ codigo_prod  │
-│ userName    │       │ nombre      │       │ nombre       │
-│ password    │       │ apellido    │       │ precio       │
-│ email       │       │ direccion   │       │ stock        │
-│ rol         │       │ estado      │       │ estado       │
-│ estado      │       └──────┬──────┘       └──────┬───────┘
-└──────┬──────┘              │                     │
-       │                     ▼                     ▼
-       │              ┌─────────────┐       ┌──────────────┐
-       └─────────────►│    Ventas   │◄──────│ DetalleVenta │
-                      │─────────────│       │──────────────│
-                      │ codigo_vta  │       │ codigo_det   │
-                      │ fecha_venta │       │ cantidad     │
-                      │ total       │       │ precio_unit  │
-                      │ estado      │       │ sub_total    │
-                      └─────────────┘       └──────────────┘
+┌──────────────┐       ┌──────────────┐       ┌──────────────┐
+│   Usuarios   │       │   Clientes   │       │   Productos  │
+│──────────────│       │──────────────│       │──────────────│
+│ codigo_usr   │       │ dpi_cliente  │       │ codigo_prod  │
+│ userName     │       │ nombre       │       │ nombre       │
+│ password     │       │ apellido     │       │ precio       │
+│ email        │       │ direccion    │       │ stock        │
+│ rol          │       │ estado       │       │ estado       │
+│ estado       │       └──────┬───────┘       └──────┬───────┘
+└──────┬───────┘              │                      │
+       │                      ▼                      │
+       │               ┌──────────────┐              │
+       └──────────────►│    Ventas    │◄─────────────┤
+                        │──────────────│              │
+                        │ codigo_venta │   ┌──────────▼─────┐
+                        │ fecha_venta  │◄──│  DetalleVenta  │
+                        │ total        │   │────────────────│
+                        │ estado       │   │ codigo_detalle │
+                        └──────────────┘   │ cantidad       │
+                                           │ precio_unit    │
+                                           │ sub_total      │
+                                           └────────────────┘
 ```
 
-El archivo `kinalappdb.mwb` incluido en el proyecto contiene el modelo visual completo. Ábrelo con **MySQL Workbench** para verlo gráficamente.
+El archivo `kinalappdb.mwb` incluido en el repositorio contiene el diagrama visual. Ábrelo con **MySQL Workbench** para verlo gráficamente.
 
 ---
 
@@ -438,45 +452,106 @@ El archivo `kinalappdb.mwb` incluido en el proyecto contiene el modelo visual co
 
 ## Capturas de Pantalla
 
+---
+
+### Login
+
+![Login](imagenes/login.png)
+
+---
+
+### Dashboard principal
+
+![Dashboard](imagenes/dashboard.png)
+
+---
+
+### Registro
+
+![Registro](imagenes/registro.png)
+
+---
+
 ### Prueba de endpoints en Postman
+
 ---
+
 #### GET
+
 ![Prueba GET Clientes](imagenes/listCliente.png)
+
 ---
+
 ![Prueba GET Usuarios](imagenes/listUsuarios.png)
+
 ---
+
 ![Prueba GET Ventas](imagenes/listVenta.png)
+
 ---
+
 ![Prueba GET DetalleVenta](imagenes/listDetalleVenta.png)
+
 ---
+
 ![Prueba GET Productos](imagenes/listProducto.png)
+
 #### POST
+
 ![Prueba POST Clientes](imagenes/postCliente.png)
+
 ---
+
 ![Prueba POST Usuarios](imagenes/postUsuario.png)
+
 ---
+
 ![Prueba POST Ventas](imagenes/postVenta.png)
+
 ---
+
 ![Prueba POST DetalleVenta](imagenes/postDetalleVenta.png)
+
 ---
+
 ![Prueba POST Productos](imagenes/postProducto.png)
+
 #### PUT
+
 ![Prueba PUT Clientes](imagenes/putCliente.png)
+
 ---
+
 ![Prueba PUT Usuarios](imagenes/putUsuario.png)
+
 ---
+
 ![Prueba PUT Ventas](imagenes/putVenta.png)
+
 ---
+
 ![Prueba PUT DetalleVenta](imagenes/putDetalleVenta.png)
+
 ---
+
 ![Prueba PUT Productos](imagenes/putProducto.png)
+
 #### DELETE
+
 ![Prueba DELETE Clientes](imagenes/deleteCliente.png)
+
 ---
+
 ![Prueba DELETE Usuarios](imagenes/deleteUsuario.png)
+
 ---
+
 ![Prueba DELETE Ventas](imagenes/deleteVenta.png)
+
 ---
+
 ![Prueba DELETE DetalleVenta](imagenes/deleteDetalleVenta.png)
+
 ---
+
 ![Prueba DELETE Productos](imagenes/deleteProducto.png)
