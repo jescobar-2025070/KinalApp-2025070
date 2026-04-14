@@ -50,7 +50,7 @@
             <div class="k-nav-section" sec:authorize="hasRole('ADMIN')">
                 <span class="k-nav-label">Administración</span>
                 <ul class="list-unstyled mb-0">
-                    <li><a class="k-nav-link active" th:href="@{/vista/usuarios}"><span class="k-nav-icon"><i class="bi bi-shield-person"></i></span>Usuarios</a></li>
+                    <li><a class="k-nav-link active" th:href="@{/vista/usuarios}"><span class="k-nav-icon"><i class="bi bi-building-lock"></i></span>Usuarios</a></li>
                 </ul>
             </div>
         </div>
@@ -73,7 +73,7 @@
                 <button class="k-alert-close" type="button">&#x2715;</button>
             </div>
                 <div class="k-page-header">
-                    <div><h1 class="k-page-title"><span class="k-title-icon" style="background:rgba(224,92,104,0.15);color:var(--k-danger)"><i class="bi bi-shield-person"></i></span>Usuarios del Sistema</h1><p class="k-page-sub">Solo visible para administradores</p></div>
+                    <div><h1 class="k-page-title"><span class="k-title-icon" style="background:rgba(224,92,104,0.15);color:var(--k-danger)"><i class="bi bi-building-lock"></i></span>Usuarios del Sistema</h1></div>
                     <a th:href="@{/vista/usuarios/nuevo}" class="k-btn k-btn-primary"><i class="bi bi-plus-lg"></i> Nuevo Usuario</a>
                 </div>
                 <div class="k-card">

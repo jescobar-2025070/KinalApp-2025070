@@ -16,7 +16,6 @@
         <a class="k-navbar-brand" th:href="@{/dashboard}" style="margin-left:8px;">
             <div class="k-logo-slot">
                 <img th:src="@{/images/logoalt.png}" alt="Logo"/>
-                <span class="k-logo-fallback">K</span>
             </div>
             <span class="k-brand-name">KinalApp</span>
         </a>
@@ -33,7 +32,6 @@
             <a class="k-navbar-brand" th:href="@{/dashboard}">
                 <div class="k-logo-slot">
                     <img th:src="@{/images/logo.png}" alt="Logo"/>
-                    <span class="k-logo-fallback">K</span>
                 </div>
                 <span class="k-brand-name">KinalApp</span>
             </a>
@@ -77,9 +75,21 @@
                                 <div style="position:relative;"><input type="password" id="password" th:field="*{password}" class="k-input" placeholder="Mínimo 6 caracteres" th:required="${usuario.codigoUsuario == null}" style="padding-right:42px;"/>
                                 <button type="button" id="togglePwd" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--k-muted);cursor:pointer;font-size:15px;"><i class="bi bi-eye" id="eyeIcon"></i></button></div>
                             </div>
-                            <div class="row-grid col-2">
-                                <div class="k-form-group"><label class="k-label">Rol</label><select th:field="*{rol}" class="k-select"><option value="USER">USER — General</option><option value="ADMIN">ADMIN — Total</option></select></div>
-                                <div class="k-form-group" style="margin-bottom:28px;"><label class="k-label">Estado</label><select th:field="*{estado}" class="k-select"><option value="1">Activo</option><option value="0">Inactivo</option></select></div>
+                            <div class="k-form-group">
+                                <div class="k-form-group">
+                                    <label class="k-label">Rol</label>
+                                    <select th:field="*{rol}" class="k-select">
+                                        <option value="USER">USER — General</option>
+                                        <option value="ADMIN">ADMIN — Total</option>
+                                    </select>
+                                </div>
+                                <div class="k-form-group" style="margin-bottom:28px;">
+                                    <label class="k-label">Estado</label>
+                                    <select th:field="*{estado}" class="k-select">
+                                        <option value="1">Activo</option>
+                                        <option value="0">Inactivo</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="d-flex gap-2 justify-end">
                                 <a th:href="@{/vista/usuarios}" class="k-btn k-btn-ghost">Cancelar</a>
