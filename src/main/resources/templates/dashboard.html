@@ -50,7 +50,7 @@
             <div class="k-nav-section" sec:authorize="hasRole('ADMIN')">
                 <span class="k-nav-label">Administración</span>
                 <ul class="list-unstyled mb-0">
-                    <li><a class="k-nav-link" th:href="@{/vista/usuarios}"><span class="k-nav-icon"><i class="bi bi-shield-person"></i></span>Usuarios</a></li>
+                    <li><a class="k-nav-link" th:href="@{/vista/usuarios}"><span class="k-nav-icon"><i class="bi bi-building-lock"></i></span>Usuarios</a></li>
                 </ul>
             </div>
         </div>
@@ -84,7 +84,7 @@
                         <div><div class="k-stat-value" th:text="${totalVentas}">0</div><div class="k-stat-label">Ventas</div><div class="k-stat-badge" th:text="${ventasActivas} + ' activas'"></div></div>
                     </a>
                     <a th:href="@{/vista/usuarios}" class="k-stat-card" style="text-decoration:none;" sec:authorize="hasRole('ADMIN')">
-                        <div class="k-stat-icon danger"><i class="bi bi-shield-person"></i></div>
+                        <div class="k-stat-icon danger"><i class="bi bi-building-lock"></i></div>
                         <div><div class="k-stat-value" th:text="${totalUsuarios}">0</div><div class="k-stat-label">Usuarios</div><div class="k-stat-badge">del sistema</div></div>
                     </a>
                 </div>
