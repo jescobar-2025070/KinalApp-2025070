@@ -17,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class    SecurityConfig {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -60,12 +60,15 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasRole("ADMIN")
 
                 // ── Vistas Thymeleaf ───────────────────────────────────────────
+                .requestMatchers("/vista/usuarios/**").hasRole("ADMIN")
+                .requestMatchers("/vista/clientes/editar/**", "/vista/clientes/eliminar/**").hasRole("ADMIN")
+                .requestMatchers("/vista/productos/editar/**", "/vista/productos/eliminar/**").hasRole("ADMIN")
+                .requestMatchers("/vista/ventas/editar/**", "/vista/ventas/eliminar/**").hasRole("ADMIN")
+                .requestMatchers("/vista/detalles/editar/**", "/vista/detalles/eliminar/**").hasRole("ADMIN")
                 .requestMatchers("/dashboard/**").authenticated()
                 .requestMatchers("/vista/clientes/**").authenticated()
                 .requestMatchers("/vista/productos/**").authenticated()
                 .requestMatchers("/vista/ventas/**").authenticated()
-                .requestMatchers("/vista/usuarios/**").hasRole("ADMIN")
-
                 .anyRequest().authenticated()
             )
             // Login form de Spring Security apuntando a nuestra vista personalizada
