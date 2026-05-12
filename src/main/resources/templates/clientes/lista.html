@@ -82,7 +82,7 @@
                         <div class="k-search"><i class="bi bi-search k-search-icon"></i><input type="text" id="buscador" class="k-input" placeholder="Buscar..." style="width:220px;"/></div>
                     </div>
                     <div class="k-card-body no-pad"><div class="k-table-wrap"><table class="k-table">
-                        <thead><tr><th>DPI</th><th>Nombre</th><th>Apellido</th><th>Dirección</th><th class="text-center">Estado</th><th class="text-center">Acciones</th></tr></thead>
+                        <thead><tr><th>DPI</th><th>Nombre</th><th>Apellido</th><th>Dirección</th><th class="text-center">Estado</th><th class="text-center" sec:authorize="hasRole('ADMIN')">Acciones</th></tr></thead>
                         <tbody>
                             <tr th:each="c : ${clientes}">
                                 <td class="mono" th:text="${c.DPICliente}">—</td>
@@ -90,7 +90,7 @@
                                 <td th:text="${c.apellidoCliente}">—</td>
                                 <td th:text="${c.direccion != null ? c.direccion : '—'}">—</td>
                                 <td class="text-center"><span th:if="${c.estado==1}" class="k-chip k-chip-success">Activo</span><span th:if="${c.estado!=1}" class="k-chip k-chip-muted">Inactivo</span></td>
-                                <td class="text-center"><div class="d-flex gap-2" style="justify-content:center;">
+                                <td class="text-center" sec:authorize="hasRole('ADMIN')"><div class="d-flex gap-2" style="justify-content:center;" >
                                     <a th:href="@{/vista/clientes/editar/}+${c.DPICliente}" class="k-btn k-btn-ghost k-btn-icon" title="Editar"><i class="bi bi-pencil"></i></a>
                                     <button class="k-btn k-btn-danger k-btn-icon" th:attr="data-id=${c.DPICliente},data-nombre=${c.nombreCliente + ' ' + c.apellidoCliente}" onclick="abrirModalEliminar(this,'/vista/clientes/eliminar/')"><i class="bi bi-trash3"></i></button>
                                 </div></td>
