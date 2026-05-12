@@ -82,7 +82,7 @@
                         <div class="k-search"><i class="bi bi-search k-search-icon"></i><input type="text" id="buscador" class="k-input" placeholder="Buscar..." style="width:220px;"/></div>
                     </div>
                     <div class="k-card-body no-pad"><div class="k-table-wrap"><table class="k-table">
-                        <thead><tr><th>#</th><th>Fecha</th><th>Cliente</th><th>Vendedor</th><th class="text-end">Total</th><th class="text-center">Estado</th><th class="text-center">Editar</th></tr></thead>
+                        <thead><tr><th>#</th><th>Fecha</th><th>Cliente</th><th>Vendedor</th><th class="text-end">Total</th><th class="text-center">Estado</th><th class="text-center" sec:authorize="hasRole('ADMIN')">Editar</th></tr></thead>
                         <tbody>
                             <tr th:each="v : ${ventas}">
                                 <td class="mono" th:text="${v.codigoVenta}">—</td>
@@ -91,7 +91,7 @@
                                 <td th:text="${v.usuario != null ? v.usuario.getUserName() : '—'}">—</td>
                                 <td class="text-end" style="color:var(--k-teal);font-weight:700;">Q <span th:text="${#numbers.formatDecimal(v.total,1,2)}">0.00</span></td>
                                 <td class="text-center"><span th:if="${v.estado==1}" class="k-chip k-chip-success">Activa</span><span th:if="${v.estado!=1}" class="k-chip k-chip-muted">Inactiva</span></td>
-                                <td class="text-center"><a th:href="@{/vista/ventas/editar/}+${v.codigoVenta}" class="k-btn k-btn-ghost k-btn-icon"><i class="bi bi-pencil"></i></a></td>
+                                <td class="text-center" sec:authorize="hasRole('ADMIN')"><a th:href="@{/vista/ventas/editar/}+${v.codigoVenta}" class="k-btn k-btn-ghost k-btn-icon"><i class="bi bi-pencil"></i></a></td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(ventas)}"><td colspan="7" style="text-align:center;padding:48px;color:var(--k-muted);"><i class="bi bi-receipt" style="font-size:2.5rem;display:block;margin-bottom:10px;"></i>Sin ventas. <a th:href="@{/vista/ventas/nuevo}" style="color:var(--k-teal);">Registrar la primera</a></td></tr>
                         </tbody>

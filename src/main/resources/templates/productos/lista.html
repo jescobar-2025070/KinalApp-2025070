@@ -82,7 +82,7 @@
                         <div class="k-search"><i class="bi bi-search k-search-icon"></i><input type="text" id="buscador" class="k-input" placeholder="Buscar..." style="width:220px;"/></div>
                     </div>
                     <div class="k-card-body no-pad"><div class="k-table-wrap"><table class="k-table">
-                        <thead><tr><th>#</th><th>Nombre</th><th class="text-end">Precio</th><th class="text-center">Stock</th><th class="text-center">Estado</th><th class="text-center">Acciones</th></tr></thead>
+                        <thead><tr><th>#</th><th>Nombre</th><th class="text-end">Precio</th><th class="text-center">Stock</th><th class="text-center">Estado</th><th class="text-center" sec:authorize="hasRole('ADMIN')">Acciones</th></tr></thead>
                         <tbody>
                             <tr th:each="p : ${productos}">
                                 <td class="mono" th:text="${p.codigoProducto}">—</td>
@@ -90,7 +90,7 @@
                                 <td class="text-end" style="color:var(--k-teal);font-weight:600;">Q <span th:text="${#numbers.formatDecimal(p.precio,1,2)}">0.00</span></td>
                                 <td class="text-center"><span th:text="${p.stock}" th:class="${p.stock <= 5} ? 'k-chip k-chip-danger' : 'k-chip k-chip-muted'">0</span></td>
                                 <td class="text-center"><span th:if="${p.estado==1}" class="k-chip k-chip-success">Activo</span><span th:if="${p.estado!=1}" class="k-chip k-chip-muted">Inactivo</span></td>
-                                <td class="text-center"><div class="d-flex gap-2" style="justify-content:center;">
+                                <td class="text-center" sec:authorize="hasRole('ADMIN')"><div class="d-flex gap-2" style="justify-content:center;">
                                     <a th:href="@{/vista/productos/editar/}+${p.codigoProducto}" class="k-btn k-btn-ghost k-btn-icon"><i class="bi bi-pencil"></i></a>
                                     <button class="k-btn k-btn-danger k-btn-icon" th:attr="data-id=${p.codigoProducto},data-nombre=${p.nombreProducto}" onclick="abrirModalEliminar(this,'/vista/productos/eliminar/')"><i class="bi bi-trash3"></i></button>
                                 </div></td>

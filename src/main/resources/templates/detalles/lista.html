@@ -82,7 +82,7 @@
                         <div class="k-search"><i class="bi bi-search k-search-icon"></i><input type="text" id="buscador" class="k-input" placeholder="Buscar..." style="width:220px;"/></div>
                     </div>
                     <div class="k-card-body no-pad"><div class="k-table-wrap"><table class="k-table">
-                        <thead><tr><th>#</th><th>Venta</th><th>Producto</th><th class="text-center">Cantidad</th><th class="text-end">Precio Unit.</th><th class="text-end">Subtotal</th><th class="text-center">Editar</th></tr></thead>
+                        <thead><tr><th>#</th><th>Venta</th><th>Producto</th><th class="text-center">Cantidad</th><th class="text-end">Precio Unit.</th><th class="text-end">Subtotal</th><th class="text-center" sec:authorize="hasRole('ADMIN')">Editar</th></tr></thead>
                         <tbody>
                             <tr th:each="d : ${detalles}">
                                 <td class="mono" th:text="${d.codigoDetalleVenta}">—</td>
@@ -91,7 +91,7 @@
                                 <td class="text-center"><span class="k-chip k-chip-muted" th:text="${d.cantidad}">0</span></td>
                                 <td class="text-end" style="color:var(--k-muted);">Q <span th:text="${d.precioUnitario != null ? #numbers.formatDecimal(d.precioUnitario,1,2) : '0.00'}">0.00</span></td>
                                 <td class="text-end" style="color:var(--k-teal);font-weight:700;">Q <span th:text="${#numbers.formatDecimal(d.subTotal,1,2)}">0.00</span></td>
-                                <td class="text-center"><a th:href="@{/vista/detalles/editar/}+${d.codigoDetalleVenta}" class="k-btn k-btn-ghost k-btn-icon"><i class="bi bi-pencil"></i></a></td>
+                                <td class="text-center" sec:authorize="hasRole('ADMIN')"><a th:href="@{/vista/detalles/editar/}+${d.codigoDetalleVenta}" class="k-btn k-btn-ghost k-btn-icon"><i class="bi bi-pencil"></i></a></td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(detalles)}"><td colspan="7" style="text-align:center;padding:48px;color:var(--k-muted);"><i class="bi bi-list-ul" style="font-size:2.5rem;display:block;margin-bottom:10px;"></i>Sin detalles. <a th:href="@{/vista/detalles/nuevo}" style="color:var(--k-teal);">Agregar el primero</a></td></tr>
                         </tbody>
